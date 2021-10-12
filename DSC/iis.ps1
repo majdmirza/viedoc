@@ -14,24 +14,39 @@ Configuration iis_setup {
             RebootNodeIfNeeded = $true
         }
         
-        WindowsFeature WebServerRole {
-            Name   = "Web-Server"
+        # WindowsFeature WebServerRole {
+        #     Name   = "Web-Server"
+        #     Ensure = "Present"
+        # }
+        # WindowsFeature WebManagementService {
+        #     Name      = "Web-Mgmt-Service"
+        #     Ensure    = "Present"
+        #     DependsOn = '[WindowsFeature]WebServerRole'
+        # }
+        # WindowsFeature WebManagementConsole {
+        #     Name      = "Web-Mgmt-Console"
+        #     Ensure    = "Present"
+        #     DependsOn = '[WindowsFeature]WebServerRole'
+        # }
+        # WindowsFeature WebManagementTools {
+        #     Name      = "Web-Mgmt-Tools"
+        #     Ensure    = "Present"
+        #     DependsOn = '[WindowsFeature]WebServerRole'
+        # }
+
+        WindowsFeature IIS {
             Ensure = "Present"
+            Name   = "Web-Server"
         }
-        WindowsFeature WebManagementService {
-            Name      = "Web-Mgmt-Service"
+        WindowsFeature IISManagementTools {
             Ensure    = "Present"
-            DependsOn = '[WindowsFeature]WebServerRole'
-        }
-        WindowsFeature WebManagementConsole {
-            Name      = "Web-Mgmt-Console"
-            Ensure    = "Present"
-            DependsOn = '[WindowsFeature]WebServerRole'
-        }
-        WindowsFeature WebManagementTools {
             Name      = "Web-Mgmt-Tools"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+        WindowsFeature IISManagementConsole {
             Ensure    = "Present"
-            DependsOn = '[WindowsFeature]WebServerRole'
+            Name      = "Web-Mgmt-Console"
+            DependsOn = '[WindowsFeature]IIS'
         }
 
         WindowsFeature ASPNet45 {
