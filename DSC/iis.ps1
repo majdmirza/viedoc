@@ -1,10 +1,14 @@
 Configuration iis_setup {
 
-    Param ()
+    Param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]     
+        [string]$nodeName
+    )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
 
-    Node 'localhost'
+    Node $nodeName
     {
         WindowsFeature WebServerRole {
             Name   = "Web-Server"
