@@ -46,7 +46,7 @@ Configuration iis_setup {
         WindowsFeature IISManagementConsole {
             Ensure    = "Present"
             Name      = "Web-Mgmt-Console"
-            DependsOn = '[WindowsFeature]IIS'
+            DependsOn = '[WindowsFeature]IISManagementTools'
         }
 
         WindowsFeature ASPNet45 {
