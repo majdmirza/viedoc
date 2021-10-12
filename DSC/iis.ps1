@@ -10,6 +10,10 @@ Configuration iis_setup {
 
     Node $nodeName
     {
+        LocalConfigurationManager {
+            RebootNodeIfNeeded = $true
+        }
+        
         WindowsFeature WebServerRole {
             Name   = "Web-Server"
             Ensure = "Present"
@@ -18,12 +22,15 @@ Configuration iis_setup {
             Name   = "Web-Mgmt-Service"
             Ensure = "Present"
         }
-
+        WindowsFeature WebServerManagementConsole {
+            Name   = "Web-Mgmt-Console"
+            Ensure = "Present"
+        }
         WindowsFeature ASPNet45 {
             Name   = "Web-Asp-Net45"
             Ensure = "Present"
         }
-
+       
         WindowsFeature HTTPRedirection {
             Name   = "Web-Http-Redirect"
             Ensure = "Present"
