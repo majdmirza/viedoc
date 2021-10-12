@@ -19,13 +19,21 @@ Configuration iis_setup {
             Ensure = "Present"
         }
         WindowsFeature WebManagementService {
-            Name   = "Web-Mgmt-Service"
-            Ensure = "Present"
+            Name      = "Web-Mgmt-Service"
+            Ensure    = "Present"
+            DependsOn = '[WindowsFeature]WebServerRole'
         }
         WindowsFeature WebServerManagementConsole {
-            Name   = "Web-Mgmt-Console"
-            Ensure = "Present"
+            Name      = "Web-Mgmt-Console"
+            Ensure    = "Present"
+            DependsOn = '[WindowsFeature]WebServerRole'
         }
+        WindowsFeature IISManagementTools {
+            Name      = "Web-Mgmt-Tools"
+            Ensure    = "Present"
+            DependsOn = '[WindowsFeature]WebServerRole'
+        }
+        
         WindowsFeature ASPNet45 {
             Name   = "Web-Asp-Net45"
             Ensure = "Present"
