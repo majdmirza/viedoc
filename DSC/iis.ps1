@@ -1,6 +1,3 @@
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Install-PackageProvider -Name "NuGet" -Force
-Install-Module -Name xWebAdministration -Force
 
 Configuration iis_setup {
 
