@@ -8,7 +8,7 @@ Configuration iis_setup {
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xWebAdministration
+    Import-DscResource -ModuleName @{ModuleName = 'xWebAdministration'; RequiredVersion = '3.2.0' }
 
     Node $nodeName
     {
