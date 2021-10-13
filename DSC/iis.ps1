@@ -1,3 +1,7 @@
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Install-PackageProvider -Name "NuGet" -Force
+Install-Module -Name xWebAdministration -Force
+
 Configuration iis_setup {
 
     Param (
@@ -7,6 +11,7 @@ Configuration iis_setup {
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Import-DscResource -ModuleName xWebAdministration
 
     Node $nodeName
     {
@@ -14,40 +19,40 @@ Configuration iis_setup {
             RebootNodeIfNeeded = $true
         }
         
-        # WindowsFeature WebServerRole {
-        #     Name   = "Web-Server"
-        #     Ensure = "Present"
-        # }
-        # WindowsFeature WebManagementService {
-        #     Name      = "Web-Mgmt-Service"
-        #     Ensure    = "Present"
-        #     DependsOn = '[WindowsFeature]WebServerRole'
-        # }
-        # WindowsFeature WebManagementConsole {
-        #     Name      = "Web-Mgmt-Console"
-        #     Ensure    = "Present"
-        #     DependsOn = '[WindowsFeature]WebServerRole'
-        # }
-        # WindowsFeature WebManagementTools {
-        #     Name      = "Web-Mgmt-Tools"
-        #     Ensure    = "Present"
-        #     DependsOn = '[WindowsFeature]WebServerRole'
-        # }
-
-        WindowsFeature IIS {
-            Ensure = "Present"
+        WindowsFeature WebServerRole {
             Name   = "Web-Server"
+            Ensure = "Present"
         }
-        WindowsFeature IISManagementTools {
+        WindowsFeature WebManagementService {
+            Name      = "Web-Mgmt-Service"
             Ensure    = "Present"
-            Name      = "Web-Mgmt-Tools"
-            DependsOn = '[WindowsFeature]IIS'
+            DependsOn = '[WindowsFeature]WebServerRole'
         }
-        WindowsFeature IISManagementConsole {
-            Ensure    = "Present"
+        WindowsFeature WebManagementConsole {
             Name      = "Web-Mgmt-Console"
-            DependsOn = '[WindowsFeature]IISManagementTools'
+            Ensure    = "Present"
+            DependsOn = '[WindowsFeature]WebServerRole'
         }
+        WindowsFeature WebManagementTools {
+            Name      = "Web-Mgmt-Tools"
+            Ensure    = "Present"
+            DependsOn = '[WindowsFeature]WebServerRole'
+        }
+
+        # WindowsFeature IIS {
+        #     Ensure = "Present"
+        #     Name   = "Web-Server"
+        # }
+        # WindowsFeature IISManagementTools {
+        #     Ensure    = "Present"
+        #     Name      = "Web-Mgmt-Tools"
+        #     DependsOn = '[WindowsFeature]IIS'
+        # }
+        # WindowsFeature IISManagementConsole {
+        #     Ensure    = "Present"
+        #     Name      = "Web-Mgmt-Console"
+        #     DependsOn = '[WindowsFeature]IISManagementTools'
+        # }
 
         WindowsFeature ASPNet45 {
             Name   = "Web-Asp-Net45"
@@ -93,5 +98,23 @@ Configuration iis_setup {
             Name   = "Web-AppInit"
             Ensure = "Present"
         }
+
+        xWebsite DevWebsite
+        {
+            Ensure       = 'Present'
+            Name         = 'viedoc4'
+            State        = 'Started'
+            PhysicalPath = 'C:\inetpub\wwwroot\viedoc4'
+            BindingInfo  = @( MSFT_xWebBindingInformation
+                {
+                    Protocol = "HTTP"
+                    Port     = 80
+                    HostName = 'vm-app1-4jtquxj7hbmfy.westeurope.cloudapp.azure.com'
+                }
+
+            )
+            DependsOn    = '[File]viedoc4folder'
+
+        } 
     }
 }
