@@ -96,6 +96,13 @@ Configuration iis_setup {
             Ensure = "Present"
         }
 
+        File viedoc4folder {
+            Type            = 'Directory'
+            DestinationPath = 'C:\inetpub\wwwroot\viedoc4'
+            Ensure          = "Present"
+            DependsOn       = '[WindowsFeature]ASPNet45'
+        }
+        
         xWebsite DevWebsite
         {
             Ensure       = 'Present'
