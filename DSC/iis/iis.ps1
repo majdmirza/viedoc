@@ -1,4 +1,3 @@
-
 Configuration iis_setup {
 
     Param (
@@ -8,7 +7,7 @@ Configuration iis_setup {
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName @{ModuleName = 'xWebAdministration'; RequiredVersion = '3.2.0' }
+    Import-DscResource -ModuleName @{ModuleName = "xWebAdministration"; ModuleVersion = "3.2.0" }
 
     Node $nodeName
     {
@@ -94,6 +93,13 @@ Configuration iis_setup {
         WindowsFeature ApplicationInitialization {
             Name   = "Web-AppInit"
             Ensure = "Present"
+        }
+
+        File viedoc4folder {
+            Type            = 'Directory'
+            DestinationPath = 'C:\inetpub\wwwroot\viedoc4'
+            Ensure          = "Present"
+            DependsOn       = '[WindowsFeature]ASPNet45'
         }
 
         xWebsite DevWebsite

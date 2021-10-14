@@ -1,4 +1,3 @@
-
 Configuration iis_setup {
 
     Param (
@@ -102,7 +101,7 @@ Configuration iis_setup {
             Ensure          = "Present"
             DependsOn       = '[WindowsFeature]ASPNet45'
         }
-        
+
         xWebsite DevWebsite
         {
             Ensure       = 'Present'
