@@ -105,14 +105,14 @@ Configuration iis_setup {
         }
 
         foreach ($website in $websites) {
-            File websiteFolder {
+            File $website.name {
                 Type            = 'Directory'
                 DestinationPath = 'C:\inetpub\wwwroot\' + $website.name
                 Ensure          = "Present"
                 DependsOn       = '[WindowsFeature]ASPNet45'
             }
     
-            xWebsite DevWebsite {
+            xWebsite $website.name {
                 Ensure      = 'Present'
                 Name        = 'website'
                 State       = 'Started'
