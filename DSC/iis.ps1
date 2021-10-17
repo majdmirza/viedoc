@@ -1,3 +1,11 @@
+class Website {
+    [DscProperty(Key)]
+    [string] $name
+
+    [DscProperty(Mandatory)]
+    [string] $host
+}
+
 Configuration iis_setup {
 
     Param (
@@ -12,7 +20,7 @@ Configuration iis_setup {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]     
-        [array]$websites
+        [Website[]]$websites
 
     )
 
