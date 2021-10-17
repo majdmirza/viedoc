@@ -4,6 +4,10 @@ Configuration iis_setup {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]     
         [string]$nodeName
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]     
+        [string]$viedoc4hostName
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -112,7 +116,8 @@ Configuration iis_setup {
                 {
                     Protocol = "HTTP"
                     Port     = 80
-                    HostName = 'vm-app1-4jtquxj7hbmfy.westeurope.cloudapp.azure.com'
+                    HostName = $viedoc4hostName
+
                 }
 
             )
