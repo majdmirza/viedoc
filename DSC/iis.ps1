@@ -7,14 +7,19 @@ Configuration iis_setup {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]     
-        [string]$viedoc4hostName
+        [string]$viedoc4hostName,
+
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]     
+        [array]$websites
+
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DscResource -ModuleName @{ModuleName = "xWebAdministration"; ModuleVersion = "3.2.0" }
 
-    Node $nodeName
-    {
+    Node $nodeName {
         LocalConfigurationManager {
             RebootNodeIfNeeded = $true
         }
@@ -99,30 +104,27 @@ Configuration iis_setup {
             Ensure = "Present"
         }
 
-        File viedoc4folder {
-            Type            = 'Directory'
-            DestinationPath = 'C:\inetpub\wwwroot\viedoc4'
-            Ensure          = "Present"
-            DependsOn       = '[WindowsFeature]ASPNet45'
+        foreach ($website in $websites) {
+            File websiteFolder {
+                Type            = 'Directory'
+                DestinationPath = 'C:\inetpub\wwwroot\' + $website.name
+                Ensure          = "Present"
+                DependsOn       = '[WindowsFeature]ASPNet45'
+            }
+    
+            xWebsite DevWebsite {
+                Ensure      = 'Present'
+                Name        = 'website'
+                State       = 'Started'
+                PhysicalPath = 'C:\inetpub\wwwroot\' + $website.name
+                BindingInfo = @( MSFT_xWebBindingInformation {
+                        Protocol = "HTTP"
+                        Port     = 80
+                        HostName = $website.host
+                    }
+                )
+                DependsOn   = '[File]websiteFolder'
+            } 
         }
-
-        xWebsite DevWebsite
-        {
-            Ensure       = 'Present'
-            Name         = 'viedoc4'
-            State        = 'Started'
-            PhysicalPath = 'C:\inetpub\wwwroot\viedoc4'
-            BindingInfo  = @( MSFT_xWebBindingInformation
-                {
-                    Protocol = "HTTP"
-                    Port     = 80
-                    HostName = $viedoc4hostName
-
-                }
-
-            )
-            DependsOn    = '[File]viedoc4folder'
-
-        } 
     }
 }
