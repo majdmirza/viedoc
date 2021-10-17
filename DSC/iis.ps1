@@ -3,7 +3,7 @@ Configuration iis_setup {
     Param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]     
-        [string]$nodeName
+        [string]$nodeName,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]     
