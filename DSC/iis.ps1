@@ -121,17 +121,17 @@ Configuration iis_setup {
             }
     
             xWebsite $website.name {
-                Ensure      = 'Present'
-                Name        = 'website'
-                State       = 'Started'
+                Name        = $website.name
                 PhysicalPath = 'C:\inetpub\wwwroot\' + $website.name
+                Ensure      = 'Present'
+                State       = 'Started'
                 BindingInfo = @( MSFT_xWebBindingInformation {
                         Protocol = "HTTP"
                         Port     = 80
                         HostName = $website.host
                     }
                 )
-                DependsOn   = '[File]websiteFolder'
+                DependsOn   = '[File]' + $website.name
             } 
         }
     }
