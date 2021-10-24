@@ -158,7 +158,7 @@ Configuration iis_setup {
                 DependsOn   = '[File]' + $website.name
             }
              
-            Script $($(Get-Variable "CertificateBinding $(website.name)").Value) {
+            Script $website.name {
                 GetScript  = { @{Result = "CertificateBinding" } }
                 TestScript = { $false }
                 SetScript  = {
