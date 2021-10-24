@@ -145,7 +145,7 @@ Configuration iis_setup {
             }
     
             xWebsite $website.name {
-                Name        = $website.name
+                Name        = $website.host
                 PhysicalPath = 'C:\inetpub\wwwroot\' + $website.name
                 Ensure      = 'Present'
                 State       = 'Started'
