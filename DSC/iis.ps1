@@ -150,7 +150,7 @@ Configuration iis_setup {
                 Ensure      = 'Present'
                 State       = 'Started'
                 BindingInfo = @( MSFT_xWebBindingInformation {
-                        Protocol             = "HTTP"
+                        Protocol             = "HTTPS"
                         Port                 = 443
                         HostName             = $website.host
                         CertificateStoreName = "MY"
