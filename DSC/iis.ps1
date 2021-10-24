@@ -150,11 +150,12 @@ Configuration iis_setup {
                 Ensure      = 'Present'
                 State       = 'Started'
                 BindingInfo = @( MSFT_xWebBindingInformation {
-                        Protocol              = "HTTP"
-                        Port                  = 443
-                        HostName              = $website.host
-                        CertificateStore      = "MY"
-                        CertificateThumbprint = "D97BEAADDADFCC803A9645723E45B2563FC4A0FE"
+                        Protocol             = "HTTP"
+                        Port                 = 443
+                        HostName             = $website.host
+                        CertificateStoreName = "MY"
+                        CertificateSubject   = "CN=mmgroup.solutions"
+                        # CertificateThumbprint = "D97BEAADDADFCC803A9645723E45B2563FC4A0FE"
                     }
                 )
                 DependsOn   = '[File]' + $website.name
