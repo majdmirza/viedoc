@@ -130,7 +130,7 @@ Configuration iis_setup {
             SetScript  = {
                 $path = "C:\mmgroup-solutions.pfx"
                 [Io.File]::WriteAllBytes($path, [System.Convert]::FromBase64String($using:backendCertificate))
-                Import-PfxCertificate -FilePath $path -CertStoreLocation Cert:\LocalMachine\My -Password $(ConvertTo-SecureString -String $using:backendCertificatePwd -Force -AsPlainText)
+                Import-PfxCertificate -FilePath $path -CertStoreLocation Cert:\LocalMachine\My ##-Password $(ConvertTo-SecureString -String $using:backendCertificatePwd -Force -AsPlainText)
             }
             GetScript  = { @{Result = "InstallCertificate" } }
             DependsOn  = '[WindowsFeature]WebServerRole'
