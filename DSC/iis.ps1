@@ -157,7 +157,7 @@ Configuration iis_setup {
                 )
                 DependsOn   = '[File]' + $website.name
             } 
-            $certbind = "CertificateBinding $website.name" 
+            $certbind = "CertificateBinding $(website.name)" 
             Script $certbind {
                 GetScript  = { @{Result = "CertificateBinding" } }
                 TestScript = { $false }
