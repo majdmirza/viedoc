@@ -21,8 +21,8 @@ Configuration iis_setup {
         [ValidateNotNullOrEmpty()]   
         [string]$backendCertificate,
 
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]   
+        # [Parameter(Mandatory = $true)]
+        # [ValidateNotNullOrEmpty()]   
         [string]$backendCertificatePwd        
     )
 
