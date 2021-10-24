@@ -15,13 +15,15 @@ Configuration iis_setup {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]     
-        [string]$viedoc4hostName,
-
+        [Website[]]$websites,
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]     
-        [Website[]]$websites
+        [ValidateNotNullOrEmpty()]   
+        [string]$backendCertificate,
 
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]   
+        [string]$backendCertificatePwd        
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -112,6 +114,28 @@ Configuration iis_setup {
             Ensure = "Present"
         }
 
+        # Stop the default website
+        xWebsite DefaultSite
+        {
+            Ensure       = 'Present'
+            Name         = 'Default Web Site'
+            State        = 'Stopped'
+            PhysicalPath = 'C:\inetpub\wwwroot'
+            DependsOn    = '[WindowsFeature]ASPNet45'
+
+        }
+
+        Script InstallCertificate {
+            TestScript = { $false }
+            SetScript  = {
+                $path = "C:\backend.pfx"
+                [Io.File]::WriteAllBytes($path, [System.Convert]::FromBase64String($using:backendCertificate))
+                Import-PfxCertificate -FilePath $path -CertStoreLocation Cert:\LocalMachine\My -Password $(ConvertTo-SecureString -String $using:backendCertificatePwd -Force -AsPlainText)
+            }
+            GetScript  = { @{Result = "InstallCertificate" } }
+            DependsOn  = '[WindowsFeature]WebServerRole'
+        }
+
         foreach ($website in $websites) {
             File $website.name {
                 Type            = 'Directory'
@@ -133,6 +157,22 @@ Configuration iis_setup {
                 )
                 DependsOn   = '[File]' + $website.name
             } 
+
+            Script CertificateBinding {
+                GetScript  = { @{Result = "CertificateBinding" } }
+                TestScript = { $false }
+                SetScript  = {
+                    $path = "Cert:\LocalMachine\My"
+                    $cert = Get-ChildItem -Path $path -DNSName $using:website.host
+                    if ($cert) {
+                        New-WebBinding -Name $using:website.host -IP "*" -Port 443 -Protocol https
+                        $thumb = $path + '\' + $cert.Thumbprint
+                        cd IIS:\SSLBindings
+                        Get-Item $thumb | New-Item 0.0.0.0!443
+                    }
+                }
+                DependsOn  = '[Script]InstallCertificate'
+            }
         }
     }
 }
