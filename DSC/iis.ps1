@@ -150,29 +150,31 @@ Configuration iis_setup {
                 Ensure      = 'Present'
                 State       = 'Started'
                 BindingInfo = @( MSFT_xWebBindingInformation {
-                        Protocol = "HTTP"
-                        Port     = 80
-                        HostName = $website.host
+                        Protocol              = "HTTP"
+                        Port                  = 443
+                        HostName              = $website.host
+                        CertificateStore      = "MY"
+                        CertificateThumbprint = "D97BEAADDADFCC803A9645723E45B2563FC4A0FE"
                     }
                 )
                 DependsOn   = '[File]' + $website.name
             }
              
-            Script $website.name {
-                GetScript  = { @{Result = "CertificateBinding" } }
-                TestScript = { $false }
-                SetScript  = {
-                    $path = "Cert:\LocalMachine\My"
-                    $cert = Get-ChildItem -Path $path -DNSName $using:website.host
-                    if ($cert) {
-                        New-WebBinding -Name $using:website.host -IP "*" -Port 443 -Protocol https
-                        $thumb = $path + '\' + $cert.Thumbprint
-                        cd IIS:\SSLBindings
-                        Get-Item $thumb | New-Item 0.0.0.0!443
-                    }
-                }
-                DependsOn  = '[Script]InstallCertificate'
-            }
+            # Script $website.name {
+            #     GetScript  = { @{Result = "CertificateBinding" } }
+            #     TestScript = { $false }
+            #     SetScript  = {
+            #         $path = "Cert:\LocalMachine\My"
+            #         $cert = Get-ChildItem -Path $path -DNSName "mmgroup.solutions"
+            #         if ($cert) {
+            #             New-WebBinding -Name $using:website.host -IPAddress "*" -Port 443 -Protocol https -HostHeader $using:website.host
+            #             $thumb = $path + '\' + $cert.Thumbprint
+            #             cd IIS:\SSLBindings
+            #             Get-Item $thumb | New-Item 0.0.0.0!443
+            #         }
+            #     }
+            #     DependsOn  = '[Script]InstallCertificate'
+            # }
         }
     }
 }
