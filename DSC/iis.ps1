@@ -155,7 +155,7 @@ Configuration iis_setup {
                 DependsOn       = '[WindowsFeature]ASPNet45'
             }
     
-            wWebAppPool $website.name {
+            xWebAppPool $website.name {
                 Name                  = $website.name
                 Ensure                = "Present"
                 State                 = 'Started'
