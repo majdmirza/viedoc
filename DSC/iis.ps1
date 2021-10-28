@@ -122,7 +122,7 @@ Configuration iis_setup {
             
             Path      = "https://download.microsoft.com/download/1/2/8/128E2E22-C1B9-44A4-BE2A-5859ED1D4592/rewrite_amd64_en-US.msi"
             Arguments = "/quiet"
-            ProductId = "EB675D0A-2C95-405B-BEE8-B42A65D23E11"
+            ProductId = "9BCA2118-F753-4A1E-BCF3-5A820729965C"
         }
 
         # Stop the default website
