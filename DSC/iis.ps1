@@ -114,6 +114,17 @@ Configuration iis_setup {
             Ensure = "Present"
         }
 
+        #Install URL Rewrite module for IIS
+        Package UrlRewrite {
+            Name      = "IIS URL Rewrite Module 2"
+            DependsOn = "[WindowsFeature]ASPNet45"
+            Ensure    = "Present"
+            
+            Path      = "https://download.microsoft.com/download/1/2/8/128E2E22-C1B9-44A4-BE2A-5859ED1D4592/rewrite_amd64_en-US.msi"
+            Arguments = "/quiet"
+            ProductId = "EB675D0A-2C95-405B-BEE8-B42A65D23E11"
+        }
+
         # Stop the default website
         xWebsite DefaultSite
         {
@@ -144,12 +155,27 @@ Configuration iis_setup {
                 DependsOn       = '[WindowsFeature]ASPNet45'
             }
     
+            wWebAppPool $website.name {
+                Name                  = $website.name
+                Ensure                = "Present"
+                State                 = 'Started'
+                autoStart             = $true
+                enable32BitAppOnWin64 = $true
+                managedPipelineMode   = 'Integrated'
+                managedRuntimeLoader  = 'webengine4.dll'
+                managedRuntimeVersion = 'v4.0'
+                idleTimeout           = (New-TimeSpan -Minutes 20).ToString()
+                idleTimeoutAction     = 'Terminate'
+                maxProcesses          = 1
+            }
+
             xWebsite $website.name {
-                Name        = $website.host
+                Name            = $website.host
+                Ensure          = 'Present'
+                State           = 'Started'
+                ApplicationPool = $website.name
                 PhysicalPath = 'C:\inetpub\wwwroot\' + $website.name
-                Ensure      = 'Present'
-                State       = 'Started'
-                BindingInfo = @( MSFT_xWebBindingInformation {
+                BindingInfo     = @( MSFT_xWebBindingInformation {
                         Protocol             = "HTTPS"
                         Port                 = 443
                         HostName             = $website.host
