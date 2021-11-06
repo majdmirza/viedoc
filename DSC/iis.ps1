@@ -35,6 +35,7 @@ Configuration iis_setup {
     Node $nodeName {
         LocalConfigurationManager {
             RebootNodeIfNeeded = $true
+            DebugMode          = "ForceModuleImport"
         }
         
         WindowsFeature WebServerRole {
