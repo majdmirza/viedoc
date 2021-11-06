@@ -37,7 +37,7 @@ Configuration iis_setup {
             RebootNodeIfNeeded = $true
             DebugMode          = "ForceModuleImport"
         }
-        
+
         WindowsFeature WebServerRole {
             Name   = "Web-Server"
             Ensure = "Present"
@@ -180,12 +180,12 @@ Configuration iis_setup {
                 ApplicationPool = $website.name
                 PhysicalPath = 'C:\inetpub\wwwroot\' + $website.name
                 BindingInfo     = @( MSFT_xWebBindingInformation {
-                        Protocol             = "HTTPS"
-                        Port                 = 443
-                        HostName             = $website.host
-                        CertificateStoreName = "MY"
-                        CertificateSubject   = "CN=mmgroup.solutions"
-                        # CertificateThumbprint = "D97BEAADDADFCC803A9645723E45B2563FC4A0FE"
+                        Protocol              = "HTTPS"
+                        Port                  = 443
+                        HostName              = $website.host
+                        CertificateStoreName  = "MY"
+                        CertificateSubject    = "CN=mmgroup.solutions"
+                        CertificateThumbprint = "0d1b52a50ac0fc112fb5f8f967af8c7c591565c9"
                     }
                 )
                 DependsOn   = '[File]' + $website.name
