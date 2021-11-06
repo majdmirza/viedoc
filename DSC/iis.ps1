@@ -4,6 +4,9 @@ class Website {
 
     [DscProperty(Mandatory)]
     [string] $host
+
+    [DscProperty(Mandatory)]
+    [bool] $public
 }
 
 Configuration iis_setup {
