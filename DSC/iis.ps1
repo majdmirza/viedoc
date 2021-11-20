@@ -26,7 +26,15 @@ Configuration iis_setup {
 
         # [Parameter(Mandatory = $true)]
         # [ValidateNotNullOrEmpty()]   
-        [string]$backendCertificatePwd        
+        [string]$backendCertificatePwd,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]  
+        [string]$backendCertificateSubject,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]   
+        [string]$backendCertificateThumbprint
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -184,8 +192,8 @@ Configuration iis_setup {
                         Port                  = 443
                         HostName              = $website.host
                         CertificateStoreName  = "MY"
-                        CertificateSubject    = "CN=mmgroup.solutions"
-                        CertificateThumbprint = "0d1b52a50ac0fc112fb5f8f967af8c7c591565c9"
+                        CertificateSubject    = $backendCertificateSubject
+                        CertificateThumbprint = $backendCertificateThumbprint
                     }
                 )
                 DependsOn   = '[File]' + $website.name
