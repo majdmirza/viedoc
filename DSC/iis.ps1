@@ -85,7 +85,12 @@ Configuration iis_setup {
             Name   = "Web-Asp-Net45"
             Ensure = "Present"
         }
-       
+        
+        WindowsFeature NET-WCF-Services45 {
+            Name   = "NET-WCF-Services45"
+            Ensure = "Present"
+        }
+        
         WindowsFeature HTTPRedirection {
             Name   = "Web-Http-Redirect"
             Ensure = "Present"
