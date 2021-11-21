@@ -91,6 +91,12 @@ Configuration iis_setup {
             Ensure = "Present"
         }
         
+        WindowsFeature NET-WCF-HTTP-Activatation {
+            Name      = "NET-WCF-HTTP-Activatation"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]NET-WCF-Services45"
+        }
+
         WindowsFeature HTTPRedirection {
             Name   = "Web-Http-Redirect"
             Ensure = "Present"
