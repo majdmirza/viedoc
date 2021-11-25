@@ -1,1 +1,3 @@
-{"Modules":["xWebAdministration"]}
+{
+    "Modules": ["xWebAdministration", "NetworkingDsc"]
+}
