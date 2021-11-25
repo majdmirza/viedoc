@@ -207,7 +207,7 @@ Configuration iis_setup {
                         CertificateSubject    = $backendCertificateSubject
                         CertificateThumbprint = $backendCertificateThumbprint
                     },
-                    MSFT_xWebBindingInformation {
+                    {
                         Protocol = "HTTP"
                         Port     = 80
                         HostName = $website.name + '.local'
