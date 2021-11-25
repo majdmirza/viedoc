@@ -39,6 +39,7 @@ Configuration iis_setup {
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DscResource -ModuleName @{ModuleName = "xWebAdministration"; ModuleVersion = "3.2.0" }
+    Import-DSCResource -ModuleName NetworkingDsc
 
     Node $nodeName {
         LocalConfigurationManager {
@@ -205,11 +206,21 @@ Configuration iis_setup {
                         CertificateStoreName  = "MY"
                         CertificateSubject    = $backendCertificateSubject
                         CertificateThumbprint = $backendCertificateThumbprint
+                    },
+                    MSFT_xWebBindingInformation {
+                        Protocol = "HTTP"
+                        Port     = 80
+                        HostName = $website.name + '.local'
                     }
                 )
                 DependsOn   = '[File]' + $website.name
             }
              
+            HostsFile $website.name {
+                HostName  = $website.name + '.local'
+                IPAddress = '127.0.0.1'
+                Ensure    = 'Present'
+            }
             # Script $website.name {
             #     GetScript  = { @{Result = "CertificateBinding" } }
             #     TestScript = { $false }
