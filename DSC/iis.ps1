@@ -199,14 +199,17 @@ Configuration iis_setup {
                 State           = 'Started'
                 ApplicationPool = $website.name
                 PhysicalPath = 'C:\inetpub\wwwroot\' + $website.name
-                BindingInfo     = @( MSFT_xWebBindingInformation {
+                BindingInfo     = @( 
+                    MSFT_xWebBindingInformation 
+                    {
                         Protocol              = "HTTPS"
                         Port                  = 443
                         HostName              = $website.host
                         CertificateStoreName  = "MY"
                         CertificateSubject    = $backendCertificateSubject
                         CertificateThumbprint = $backendCertificateThumbprint
-                    },
+                    }
+                    MSFT_xWebBindingInformation 
                     {
                         Protocol = "HTTP"
                         Port     = 80
