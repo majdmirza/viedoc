@@ -39,7 +39,7 @@ Configuration iis_setup {
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DscResource -ModuleName @{ModuleName = "xWebAdministration"; ModuleVersion = "3.2.0" }
-    Import-DSCResource -ModuleName @{ModuleName = "NetworkingDsc"; ModuleVersion = "0.0.1" }
+    Import-DSCResource -ModuleName NetworkingDsc
 
     Node $nodeName {
         LocalConfigurationManager {
