@@ -219,7 +219,7 @@ Configuration iis_setup {
                 DependsOn   = '[File]' + $website.name
             }
              
-            HostsFile $website.name {
+            xHostsFile $website.name {
                 HostName  = $website.name + '.local'
                 IPAddress = '127.0.0.1'
                 Ensure    = 'Present'
